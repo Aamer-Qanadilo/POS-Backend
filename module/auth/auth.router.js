@@ -7,7 +7,6 @@ import {
   refreshToken,
   sendCode,
   forgetPassword,
-  allUsers,
 } from "./controller/auth.controller.js";
 import * as validators from "./auth.validators.js";
 

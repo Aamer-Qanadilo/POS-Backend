@@ -5,13 +5,9 @@ export const signup = {
     .object()
     .required()
     .keys({
-      userName: joi.string().required().messages({
-        "any.required": "plz enter your user name",
-        "string.empty": "username can not be empty",
-      }),
       email: joi.string().email().required(),
       password: joi.string().required(),
-      cpassword: joi.string().valid(joi.ref("password")).required(),
+      cPassword: joi.string().valid(joi.ref("password")).required(),
     }),
 };
 

@@ -5,12 +5,12 @@ import { removeImage } from "../../../service/multer.js";
 const getAllCategories = async (req, res) => {
   const categories = await categoryModel.find({});
 
-  const baseUrl = process.env.BASEURL;
-
-  const categoryUrl =
-    req.protocol + "://" + req.get("host") + baseUrl + "/uploads/categories/";
-
   if (categories) {
+    const baseUrl = process.env.BASEURL;
+
+    const categoryUrl =
+      req.protocol + "://" + req.get("host") + baseUrl + "/uploads/categories/";
+
     res.status(200).json({
       message: "success",
       imageBaseUrl: categoryUrl,
@@ -24,22 +24,24 @@ const getAllCategories = async (req, res) => {
 const getCategory = async (req, res) => {
   const { id } = req.params;
 
-  const baseUrl = process.env.BASEURL;
-
-  const categoryUrl =
-    req.protocol + "://" + req.get("host") + baseUrl + "/uploads/categories/";
-
   try {
     const category = await categoryModel.findById(id);
 
     if (category) {
-      return res
-        .status(201)
-        .json({
-          message: "success",
-          imageBaseUrl: categoryUrl,
-          data: category,
-        });
+      const baseUrl = process.env.BASEURL;
+
+      const categoryUrl =
+        req.protocol +
+        "://" +
+        req.get("host") +
+        baseUrl +
+        "/uploads/categories/";
+
+      return res.status(201).json({
+        message: "success",
+        imageBaseUrl: categoryUrl,
+        data: category,
+      });
     } else {
       return res.status(404).json({ message: "category not found" });
     }
@@ -53,11 +55,6 @@ const getCategory = async (req, res) => {
 const addCategory = async (req, res) => {
   let { name } = req.body;
 
-  const baseUrl = process.env.BASEURL;
-
-  const categoryUrl =
-    req.protocol + "://" + req.get("host") + baseUrl + "/uploads/categories/";
-
   const newCategory = new categoryModel({
     name,
     image: req.file.filename,
@@ -66,6 +63,15 @@ const addCategory = async (req, res) => {
   newCategory
     .save()
     .then((result) => {
+      const baseUrl = process.env.BASEURL;
+
+      const categoryUrl =
+        req.protocol +
+        "://" +
+        req.get("host") +
+        baseUrl +
+        "/uploads/categories/";
+
       res.status(201).json({
         message: "success",
         data: {
@@ -87,11 +93,6 @@ const addCategory = async (req, res) => {
 const updateCategory = async (req, res) => {
   let { id, name } = req.body;
 
-  const baseUrl = process.env.BASEURL;
-
-  const categoryUrl =
-    req.protocol + "://" + req.get("host") + baseUrl + "/uploads/categories/";
-
   try {
     let category = await categoryModel.findOne({ _id: id });
 
@@ -105,6 +106,15 @@ const updateCategory = async (req, res) => {
       );
 
       removeImage("categories", oldImageName);
+
+      const baseUrl = process.env.BASEURL;
+
+      const categoryUrl =
+        req.protocol +
+        "://" +
+        req.get("host") +
+        baseUrl +
+        "/uploads/categories/";
 
       return res.status(201).json({
         message: "success",
@@ -129,19 +139,16 @@ const updateCategory = async (req, res) => {
 const deleteCategory = async (req, res) => {
   const { id } = req.params;
 
-  const baseUrl = process.env.BASEURL;
-
-  const productsUrl =
-    req.protocol +
-    "://" +
-    req.get("host") +
-    baseUrl +
-    "/product/getByCategory/";
-
-  // console.log(productsUrl);
-  // console.log(id);
-
   try {
+    const baseUrl = process.env.BASEURL;
+
+    const productsUrl =
+      req.protocol +
+      "://" +
+      req.get("host") +
+      baseUrl +
+      "/product/getByCategory/";
+
     const { data } = await axios.get(productsUrl + id);
 
     if (data.message === "success") {

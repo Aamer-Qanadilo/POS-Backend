@@ -93,12 +93,12 @@ const updateUnit = async (req, res) => {
 const deleteUnit = async (req, res) => {
   const { id } = req.params;
 
-  const baseUrl = process.env.BASEURL;
-
-  const productsUrl =
-    req.protocol + "://" + req.get("host") + baseUrl + "/product/getByUnit/";
-
   try {
+    const baseUrl = process.env.BASEURL;
+
+    const productsUrl =
+      req.protocol + "://" + req.get("host") + baseUrl + "/product/getByUnit/";
+
     const { data } = await axios.get(productsUrl + id);
 
     if (data.message === "success") {

@@ -4,12 +4,12 @@ import { removeImage } from "../../../service/multer.js";
 const getAllProducts = async (req, res) => {
   const products = await productModel.find({});
 
-  const baseUrl = process.env.BASEURL;
-
-  const productUrl =
-    req.protocol + "://" + req.get("host") + baseUrl + "/uploads/products/";
-
   if (products) {
+    const baseUrl = process.env.BASEURL;
+
+    const productUrl =
+      req.protocol + "://" + req.get("host") + baseUrl + "/uploads/products/";
+
     res
       .status(200)
       .json({ message: "success", imageBaseUrl: productUrl, data: products });
@@ -63,16 +63,11 @@ const getAllProductsByCategory = async (req, res) => {
 const addProduct = async (req, res) => {
   let { name, code, category, price, unitOfMeasure } = req.body;
 
-  const baseUrl = process.env.BASEURL;
-
   price = Number(price);
   if (isNaN(price)) {
     res.json({ message: "invalid inputs" });
     return;
   }
-
-  const productUrl =
-    req.protocol + "://" + req.get("host") + baseUrl + "/uploads/products/";
 
   const product = new productModel({
     name,
@@ -86,6 +81,11 @@ const addProduct = async (req, res) => {
   product
     .save()
     .then((result) => {
+      const baseUrl = process.env.BASEURL;
+
+      const productUrl =
+        req.protocol + "://" + req.get("host") + baseUrl + "/uploads/products/";
+
       res.status(201).json({
         message: "Product added successfully!",
         userCreated: {
@@ -112,11 +112,6 @@ const addProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
   const { id } = req.params;
   let { name, code, category, price, unitOfMeasure } = req.body;
-
-  const baseUrl = process.env.BASEURL;
-
-  const productUrl =
-    req.protocol + "://" + req.get("host") + baseUrl + "/uploads/products/";
 
   try {
     let product = await productModel.findOne({ _id: id });
@@ -151,6 +146,11 @@ const updateProduct = async (req, res) => {
           },
         );
       }
+
+      const baseUrl = process.env.BASEURL;
+
+      const productUrl =
+        req.protocol + "://" + req.get("host") + baseUrl + "/uploads/products/";
 
       return res.status(201).json({
         message: "success",

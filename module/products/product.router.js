@@ -20,19 +20,19 @@ router.get(
 
 router.post(
   "",
-  product_refValidator.validateCategory,
-  product_refValidator.validateUnit,
   myMulter("products", validationTypes.image).single("image"),
   DetectError,
+  product_refValidator.validateCategory,
+  product_refValidator.validateUnit,
   productController.addProduct,
 );
 
 router.patch(
   "/:id",
-  product_refValidator.validateCategory,
-  product_refValidator.validateUnit,
   myMulter("products", validationTypes.image).single("image"),
   DetectError,
+  product_refValidator.validateCategory,
+  product_refValidator.validateUnit,
   productController.updateProduct,
 );
 

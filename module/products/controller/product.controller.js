@@ -90,13 +90,18 @@ const addProduct = async (req, res) => {
         message: "Product added successfully!",
         userCreated: {
           _id: result._id,
-          profileImg: productUrl + result.image,
+          name,
+          category,
+          code,
+          unitOfMeasure,
+          price,
+          image: productUrl + result.image,
         },
       });
     })
     .catch((err) => {
-      console.log(req.body, price);
-      console.log(err);
+      if (req.file) removeImage("products", req.file.filename);
+
       res.status(500).json({
         message: "something went wrong, please check your inputs",
         error: err,
@@ -111,7 +116,7 @@ const updateProduct = async (req, res) => {
   const baseUrl = process.env.BASEURL;
 
   const productUrl =
-    req.protocol + "://" + req.get("host") + baseUrl + "/uploads/categories/";
+    req.protocol + "://" + req.get("host") + baseUrl + "/uploads/products/";
 
   try {
     let product = await productModel.findOne({ _id: id });
@@ -120,19 +125,32 @@ const updateProduct = async (req, res) => {
       //product exists
       const oldImageName = product.image;
 
-      await productModel.findOneAndUpdate(
-        { _id: id },
-        {
-          name,
-          image: req.file.filename,
-          code,
-          category,
-          price,
-          unitOfMeasure,
-        },
-      );
+      if (req.file) {
+        await productModel.findOneAndUpdate(
+          { _id: id },
+          {
+            name,
+            image: req.file.filename,
+            code,
+            category,
+            price,
+            unitOfMeasure,
+          },
+        );
 
-      removeImage("products", oldImageName);
+        removeImage("products", oldImageName);
+      } else {
+        await productModel.findOneAndUpdate(
+          { _id: id },
+          {
+            name,
+            code,
+            category,
+            price,
+            unitOfMeasure,
+          },
+        );
+      }
 
       return res.status(201).json({
         message: "success",
@@ -143,15 +161,18 @@ const updateProduct = async (req, res) => {
           category,
           price,
           unitOfMeasure,
-          image: productUrl + req.file.filename,
+          image: productUrl + (req.file ? req.file.filename : oldImageName),
         },
       });
     } else {
+      if (req.file) removeImage("products", req.file.filename);
+
       //no product for user, create new product
       return res.status(404).json({ message: "invalid product" });
     }
   } catch (err) {
-    console.log(err);
+    if (req.file) removeImage("products", req.file.filename);
+
     res
       .status(500)
       .json({ message: "something went wrong, please check your inputs" });

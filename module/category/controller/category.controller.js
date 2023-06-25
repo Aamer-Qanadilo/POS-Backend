@@ -5,8 +5,17 @@ import { removeImage } from "../../../service/multer.js";
 const getAllCategories = async (req, res) => {
   const categories = await categoryModel.find({});
 
+  const baseUrl = process.env.BASEURL;
+
+  const categoryUrl =
+    req.protocol + "://" + req.get("host") + baseUrl + "/uploads/categories/";
+
   if (categories) {
-    res.status(200).json({ message: "success", data: categories });
+    res.status(200).json({
+      message: "success",
+      imageBaseUrl: categoryUrl,
+      data: categories,
+    });
   } else {
     res.status(404).json({ message: "not found" });
   }
@@ -15,11 +24,22 @@ const getAllCategories = async (req, res) => {
 const getCategory = async (req, res) => {
   const { id } = req.params;
 
+  const baseUrl = process.env.BASEURL;
+
+  const categoryUrl =
+    req.protocol + "://" + req.get("host") + baseUrl + "/uploads/categories/";
+
   try {
     const category = await categoryModel.findById(id);
 
     if (category) {
-      return res.status(201).json({ message: "success", data: category });
+      return res
+        .status(201)
+        .json({
+          message: "success",
+          imageBaseUrl: categoryUrl,
+          data: category,
+        });
     } else {
       return res.status(404).json({ message: "category not found" });
     }

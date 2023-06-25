@@ -1,4 +1,5 @@
 import axios from "axios";
+import { removeImage } from "../../service/multer.js";
 
 const validateCategory = async (req, res, next) => {
   const { category } = req.body;
@@ -17,15 +18,17 @@ const validateCategory = async (req, res, next) => {
     if (data.message === "success") {
       next();
     } else {
+      if (req.file) removeImage("products", req.file.filename);
+
       res.status(404).json({ message: "invalid category id" });
     }
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        message: "something went wrong, please check your inputs",
-        error,
-      });
+    if (req.file) removeImage("products", req.file.filename);
+
+    res.status(500).json({
+      message: "something went wrong, please check your inputs",
+      error,
+    });
   }
 };
 
@@ -45,15 +48,17 @@ const validateUnit = async (req, res, next) => {
     if (data.message === "success") {
       next();
     } else {
+      if (req.file) removeImage("products", req.file.filename);
+
       res.status(404).json({ message: "invalid unit id" });
     }
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        message: "something went wrong, please check your inputs",
-        error,
-      });
+    if (req.file) removeImage("products", req.file.filename);
+
+    res.status(500).json({
+      message: "something went wrong, please check your inputs",
+      error,
+    });
   }
 };
 

@@ -30,12 +30,22 @@ export const signup = async (req, res) => {
 
         let link = `${req.protocol}://${req.headers.host}${process.env.BASEURL}/auth/verify/${token}`;
         let link2 = `${req.protocol}://${req.headers.host}${process.env.BASEURL}/auth/requestEmailToken/${refreshToken}`;
-        let message = `<a href="${link}" target="_blank" style="display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 6px; margin-bottom: 10px;">verify email</a>
-                <br />
-                <a href="${link2}" target="_blank" style="display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 6px;">Request New Confirmation Email</a>
+        // let message = `<a href="${link}" target="_blank" style="display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 6px; margin-bottom: 10px;">verify email</a>
+        //         <br />
+        //         <a href="${link2}" target="_blank" style="display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 6px;">Request New Confirmation Email</a>
+        //     `;
+
+        const message = `<a href="${link}" target="_blank" style="display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 6px; background-color: #1a82e2; margin: 1rem 0;">verify email</a>
+            <br />
+                <a href="${link2}" target="_blank" style="display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 6px; background-color: #1a82e2;">Request New Confirmation Email</a>
             `;
 
-        await myEmail({ email, token, message });
+        await myEmail({
+          email,
+          token,
+          message,
+          emailPurpose: "confirm your email address",
+        });
 
         res.status(201).json({ message: "success", saveUser });
       });
@@ -91,6 +101,14 @@ export const verifyEmail = async (req, res) => {
             { confirmEmail: true },
           );
 
+          const message = `<p style="font-size: 16px; font-family: Arial, sans-serif; color: #333333; text-align: start;">We hope you'll have a great time with us and enjoy our system!</p>`;
+
+          await myEmail({
+            email: decoded.email,
+            message,
+            emailPurpose: "Welcome to PoS-Foothill System",
+          });
+
           res.status(201).json({ message: "success" });
         } else {
           res.status(404).json({ message: "email doesn't exist" });
@@ -125,9 +143,14 @@ export const refreshToken = async (req, res) => {
         );
 
         let link = `${req.protocol}://${req.headers.host}${process.env.BASEURL}/auth/verify/${token}`;
-        let message = `<a href="${link}" target="_blank" style="display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 6px;">verify email</a>`;
+        const message = `<a href="${link}" target="_blank" style="display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 6px; background-color: #1a82e2;">verify email</a>`;
 
-        await myEmail({ email, token, message });
+        await myEmail({
+          email,
+          token,
+          message,
+          emailPurpose: "confirm your email address",
+        });
 
         res.json({ message: "success" });
       }
@@ -146,9 +169,13 @@ export const sendCode = async (req, res) => {
     const accessCode = nanoid();
     await userModel.findByIdAndUpdate(user._id, { code: accessCode });
 
-    let message = `<h2>access code : ${accessCode}</h2>`;
+    const message = ` <p style="font-size: 1.3rem;display: flex; flex-direction: column; gap: 10px; margin-top: 30px;"><span>Access code:</span><span style="border: 1px solid #1a82e2; padding: 10px 20px; color: #1a82e2;">${accessCode}</span></p>`;
 
-    await myEmail({ email, message });
+    await myEmail({
+      email,
+      message,
+      emailPurpose: "Access Code to change your password",
+    });
 
     // Done , plz check your Email To Change Password
 

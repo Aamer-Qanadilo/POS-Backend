@@ -4,6 +4,7 @@ dotenv.config();
 import express from "express";
 import connectDB from "./DB/connection.js";
 import * as allRouter from "./module/index.router.js";
+import { auth } from "./middleware/auth.js";
 const app = express();
 
 app.use(cors());
@@ -13,9 +14,9 @@ const baseUrl = process.env.BASEURL;
 
 app.use(`${baseUrl}/uploads`, express.static("./uploads"));
 app.use(`${baseUrl}/auth`, allRouter.authRouter);
-app.use(`${baseUrl}/product`, allRouter.productRouter);
-app.use(`${baseUrl}/category`, allRouter.categoryRouter);
-app.use(`${baseUrl}/units`, allRouter.unitRouter);
+app.use(`${baseUrl}/product`, auth(), allRouter.productRouter);
+app.use(`${baseUrl}/category`, auth(), allRouter.categoryRouter);
+app.use(`${baseUrl}/units`, auth(), allRouter.unitRouter);
 
 app.use("*", (req, res) => {
   res.json({ message: "invalid endpoint" });

@@ -25,7 +25,14 @@ const getAllProductsByUnit = async (req, res) => {
     const products = await productModel.find({ unitOfMeasure: unitId });
 
     if (products.length) {
-      return res.status(201).json({ message: "success", data: products });
+      const baseUrl = process.env.BASEURL;
+
+      const productUrl =
+        req.protocol + "://" + req.get("host") + baseUrl + "/uploads/products/";
+
+      return res
+        .status(201)
+        .json({ message: "success", imageBaseUrl: productUrl, data: products });
     } else {
       return res
         .status(404)
@@ -46,7 +53,14 @@ const getAllProductsByCategory = async (req, res) => {
     const products = await productModel.find({ category: categoryId });
 
     if (products.length) {
-      return res.status(201).json({ message: "success", data: products });
+      const baseUrl = process.env.BASEURL;
+
+      const productUrl =
+        req.protocol + "://" + req.get("host") + baseUrl + "/uploads/products/";
+
+      return res
+        .status(201)
+        .json({ message: "success", imageBaseUrl: productUrl, data: products });
     } else {
       return res
         .status(404)
@@ -179,10 +193,34 @@ const updateProduct = async (req, res) => {
   }
 };
 
+const deleteProduct = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    let product = await productModel.findOne({ _id: id });
+
+    if (product) {
+      await productModel.findOneAndDelete({ _id: id });
+
+      removeImage("products", product.image);
+
+      res.status(201).json({ message: "success", data: product });
+    } else {
+      //no product for user, create new product
+      return res.status(404).json({ message: "invalid product" });
+    }
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "something went wrong, please check your inputs" });
+  }
+};
+
 export default {
   getAllProducts,
   getAllProductsByUnit,
   getAllProductsByCategory,
   addProduct,
   updateProduct,
+  deleteProduct,
 };

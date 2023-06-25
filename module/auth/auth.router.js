@@ -15,7 +15,6 @@ const router = Router();
 
 router.post("/signup", validation(validators.signup), signup);
 router.post("/signin", validation(validators.signin), signin);
-router.get("/allUsers", allUsers);
 router.get("/verify/:token", verifyEmail);
 router.get("/requestEmailToken/:token", refreshToken);
 router.patch("/sendCode", sendCode);

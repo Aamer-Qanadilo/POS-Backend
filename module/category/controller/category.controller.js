@@ -12,6 +12,24 @@ const getAllCategories = async (req, res) => {
   }
 };
 
+const getCategory = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const category = await categoryModel.findById(id);
+
+    if (category) {
+      return res.status(201).json({ message: "success", data: category });
+    } else {
+      return res.status(404).json({ message: "category not found" });
+    }
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "something went wrong, please check your inputs" });
+  }
+};
+
 const addCategory = async (req, res) => {
   let { name } = req.body;
 
@@ -82,7 +100,9 @@ const updateCategory = async (req, res) => {
     }
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: "something went wrong" });
+    res
+      .status(500)
+      .json({ message: "something went wrong, please check your inputs" });
   }
 };
 
@@ -128,7 +148,9 @@ const deleteCategory = async (req, res) => {
       return res.status(404).json({ message: "invalid category" });
     }
   } catch (error) {
-    res.status(500).json({ message: "something went wrong" });
+    res
+      .status(500)
+      .json({ message: "something went wrong, please check your inputs" });
   }
 };
 
@@ -137,4 +159,5 @@ export default {
   addCategory,
   updateCategory,
   deleteCategory,
+  getCategory,
 };

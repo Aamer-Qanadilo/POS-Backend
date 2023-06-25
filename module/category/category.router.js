@@ -11,6 +11,9 @@ const router = Router();
 // Get all categories
 router.get("", categoryController.getAllCategories);
 
+// Get custom category
+router.get("/:id", categoryController.getCategory);
+
 // Add a new category
 router.post(
   "",

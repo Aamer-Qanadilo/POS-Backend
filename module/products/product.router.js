@@ -5,6 +5,7 @@ import {
   validationTypes,
 } from "../../service/multer.js";
 import productController from "./controller/product.controller.js";
+import product_refValidator from "./product_ref.validator.js";
 
 const router = Router();
 
@@ -19,6 +20,8 @@ router.get(
 
 router.post(
   "",
+  product_refValidator.validateCategory,
+  product_refValidator.validateUnit,
   myMulter("products", validationTypes.image).single("image"),
   DetectError,
   productController.addProduct,
@@ -26,6 +29,8 @@ router.post(
 
 router.patch(
   "/:id",
+  product_refValidator.validateCategory,
+  product_refValidator.validateUnit,
   myMulter("products", validationTypes.image).single("image"),
   DetectError,
   productController.updateProduct,

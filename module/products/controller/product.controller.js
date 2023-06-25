@@ -33,7 +33,7 @@ const getAllProductsByUnit = async (req, res) => {
     }
   } catch (error) {
     res.status(500).json({
-      message: "something went wrong",
+      message: "something went wrong, please check your inputs",
       error,
     });
   }
@@ -54,7 +54,7 @@ const getAllProductsByCategory = async (req, res) => {
     }
   } catch (error) {
     res.status(500).json({
-      message: "something went wrong",
+      message: "something went wrong, please check your inputs",
       error,
     });
   }
@@ -98,7 +98,7 @@ const addProduct = async (req, res) => {
       console.log(req.body, price);
       console.log(err);
       res.status(500).json({
-        message: "something went wrong",
+        message: "something went wrong, please check your inputs",
         error: err,
       });
     });
@@ -152,7 +152,9 @@ const updateProduct = async (req, res) => {
     }
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: "something went wrong" });
+    res
+      .status(500)
+      .json({ message: "something went wrong, please check your inputs" });
   }
 };
 

@@ -5,6 +5,8 @@ const router = Router();
 
 router.get("", unitController.getAllUnits);
 
+router.get("/:id", unitController.getUnit);
+
 // Add a new category
 router.post("", unitController.addUnit);
 

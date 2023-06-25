@@ -7,6 +7,24 @@ const getAllUnits = async (req, res) => {
   res.json({ message: "success", data: units });
 };
 
+const getUnit = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const unit = await unitModel.findById(id);
+
+    if (unit) {
+      return res.status(201).json({ message: "success", data: unit });
+    } else {
+      return res.status(404).json({ message: "unit not found" });
+    }
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "something went wrong, please check your inputs" });
+  }
+};
+
 const addUnit = async (req, res) => {
   const { name, baseUnit, conversionFactor } = req.body;
 
@@ -65,7 +83,10 @@ const updateUnit = async (req, res) => {
       res.json({ message: "invalid inputs" });
     }
   } catch (error) {
-    res.status(500).json({ message: "something went wrong", error });
+    res.status(500).json({
+      message: "something went wrong, please check your inputs",
+      error,
+    });
   }
 };
 
@@ -99,8 +120,11 @@ const deleteUnit = async (req, res) => {
       res.status(404).json({ message: "invalid id" });
     }
   } catch (error) {
-    res.status(500).json({ message: "something went wrong", error });
+    res.status(500).json({
+      message: "something went wrong, please check your inputs",
+      error,
+    });
   }
 };
 
-export default { getAllUnits, addUnit, updateUnit, deleteUnit };
+export default { getAllUnits, getUnit, addUnit, updateUnit, deleteUnit };

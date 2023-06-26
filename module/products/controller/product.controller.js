@@ -1,3 +1,4 @@
+import axios from "axios";
 import { productModel } from "../../../DB/model/product.model.js";
 import { removeImage } from "../../../service/multer.js";
 
@@ -129,7 +130,7 @@ const addProduct = async (req, res) => {
 
       res.status(201).json({
         message: "Product added successfully!",
-        userCreated: {
+        data: {
           _id: result._id,
           name,
           category,
@@ -230,6 +231,23 @@ const deleteProduct = async (req, res) => {
       await productModel.findOneAndDelete({ _id: id });
 
       removeImage("products", product.image);
+
+      // This is used to delete the product from all of the active carts
+      try {
+        const baseUrl = process.env.BASEURL;
+
+        const cartsUrl =
+          req.protocol + "://" + req.get("host") + baseUrl + "/cart/product/";
+
+        const { data } = await axios.delete(cartsUrl + id, {
+          headers: {
+            authorization:
+              "foothill__eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTg5NmU0NzRkMWNlMGU4NDFhOTJlMiIsImlzTG9nZ2VkSW4iOnRydWUsImlhdCI6MTY4Nzc2NzIyNH0.SdrohllCDZfCcQy_pg2n0oALHtvd2z7UUxOI1rKNDLs",
+          },
+        });
+      } catch (error) {
+        // Do nothing
+      }
 
       res.status(201).json({ message: "success", data: product });
     } else {

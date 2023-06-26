@@ -99,7 +99,12 @@ const deleteUnit = async (req, res) => {
     const productsUrl =
       req.protocol + "://" + req.get("host") + baseUrl + "/product/getByUnit/";
 
-    const { data } = await axios.get(productsUrl + id);
+    const { data } = await axios.get(productsUrl + id, {
+      headers: {
+        authorization:
+          "foothill__eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTg5NmU0NzRkMWNlMGU4NDFhOTJlMiIsImlzTG9nZ2VkSW4iOnRydWUsImlhdCI6MTY4Nzc2NzIyNH0.SdrohllCDZfCcQy_pg2n0oALHtvd2z7UUxOI1rKNDLs",
+      },
+    });
 
     if (data.message === "success") {
       return res.json({

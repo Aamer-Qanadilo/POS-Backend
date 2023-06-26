@@ -18,6 +18,33 @@ const getAllProducts = async (req, res) => {
   }
 };
 
+const getProduct = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    console.log(id);
+
+    const product = await productModel.findById(id);
+
+    // console.log(product);
+
+    if (product) {
+      const baseUrl = process.env.BASEURL;
+
+      const productUrl =
+        req.protocol + "://" + req.get("host") + baseUrl + "/uploads/products/";
+
+      res
+        .status(201)
+        .json({ message: "success", imageBaseUrl: productUrl, data: product });
+    } else {
+      res.status(404).json({ message: "invalid product id" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "something went wrong" });
+  }
+};
+
 const getAllProductsByUnit = async (req, res) => {
   const { unitId } = req.params;
 
@@ -223,4 +250,5 @@ export default {
   addProduct,
   updateProduct,
   deleteProduct,
+  getProduct,
 };

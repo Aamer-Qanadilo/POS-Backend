@@ -8,13 +8,14 @@ const CartSchema = new mongoose.Schema(
     },
     products: [
       {
-        productId: Number,
+        productId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "product",
+        },
         quantity: Number,
-        name: String,
-        price: Number,
       },
     ],
-    active: {
+    isActive: {
       type: Boolean,
       default: true,
     },

@@ -17,6 +17,7 @@ app.use(`${baseUrl}/auth`, allRouter.authRouter);
 app.use(`${baseUrl}/product`, auth(), allRouter.productRouter);
 app.use(`${baseUrl}/category`, auth(), allRouter.categoryRouter);
 app.use(`${baseUrl}/units`, auth(), allRouter.unitRouter);
+app.use(`${baseUrl}/cart`, auth(), allRouter.cartRouter);
 
 app.use("*", (req, res) => {
   res.json({ message: "invalid endpoint" });

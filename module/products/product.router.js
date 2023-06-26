@@ -11,6 +11,8 @@ const router = Router();
 
 router.get("", productController.getAllProducts);
 
+router.get("/:id", productController.getProduct);
+
 router.get("/getByUnit/:unitId", productController.getAllProductsByUnit);
 
 router.get(

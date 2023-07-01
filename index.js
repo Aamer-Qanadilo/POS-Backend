@@ -14,6 +14,9 @@ const baseUrl = process.env.BASEURL;
 
 app.use(`${baseUrl}/uploads`, express.static("./uploads"));
 app.use(`${baseUrl}/auth`, allRouter.authRouter);
+app.use(`${baseUrl}/verifyToken`, auth(), (req, res) =>
+  res.status(201).json({ message: "success" }),
+);
 app.use(`${baseUrl}/product`, auth(), allRouter.productRouter);
 app.use(`${baseUrl}/category`, auth(), allRouter.categoryRouter);
 app.use(`${baseUrl}/units`, auth(), allRouter.unitRouter);

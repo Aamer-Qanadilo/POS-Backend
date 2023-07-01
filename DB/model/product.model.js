@@ -19,7 +19,7 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    price: String,
+    price: Number,
     unitOfMeasure: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "unit",

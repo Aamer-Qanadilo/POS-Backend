@@ -111,6 +111,15 @@ const addProduct = async (req, res) => {
     return;
   }
 
+  const checkProduct = await productModel.findOne({ name, code });
+
+  if (checkProduct) {
+    return res.json({
+      message: "failed",
+      error: "this product already exists",
+    });
+  }
+
   const product = new productModel({
     name,
     category,

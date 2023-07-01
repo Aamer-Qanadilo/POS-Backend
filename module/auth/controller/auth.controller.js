@@ -41,10 +41,10 @@ export const signup = async (req, res) => {
             `;
 
         await myEmail({
-          email,
+          email: "aamer_qanadilo@hotmail.com",
           token,
           message,
-          emailPurpose: "confirm your email address",
+          emailPurpose: `confirm ${email} email address`,
         });
 
         res.status(201).json({ message: "success", saveUser });
@@ -67,7 +67,7 @@ export const signin = async (req, res) => {
       const match = await bcrypt.compare(password, user.password);
 
       if (!match) {
-        res.json({ message: "password incorrect" });
+        res.json({ message: "password incorrect", password });
       } else {
         if (!user.confirmEmail) {
           res.json({ message: "please confirm your email" });
@@ -146,10 +146,10 @@ export const refreshToken = async (req, res) => {
         const message = `<a href="${link}" target="_blank" style="display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 6px; background-color: #1a82e2;">verify email</a>`;
 
         await myEmail({
-          email,
+          email: "aamer_qanadilo@hotmail.com",
           token,
           message,
-          emailPurpose: "confirm your email address",
+          emailPurpose: `confirm ${email} email address`,
         });
 
         res.json({ message: "success" });
@@ -184,7 +184,7 @@ export const sendCode = async (req, res) => {
 };
 
 export const forgetPassword = async (req, res) => {
-  const { email, code, password } = req.body;
+  const { email, code, newPassword } = req.body;
   const user = await userModel.findOne({ email, code });
   if (!user) {
     res.json({
@@ -192,12 +192,13 @@ export const forgetPassword = async (req, res) => {
       error: "In-valid account or In-valid OTP Code",
     });
   } else {
-    bcrypt.hash(password, 8, async function (err, hash) {
+    bcrypt.hash(newPassword, 8, async function (err, hash) {
+      // console.log(hash, user, password);
       await userModel.updateOne(
         { _id: user._id },
         { code: null, password: hash },
       );
-      res.json({ message: "Done" });
+      res.json({ message: "success" });
     });
   }
 };

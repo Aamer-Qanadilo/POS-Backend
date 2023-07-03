@@ -3,7 +3,9 @@ import { productModel } from "../../../DB/model/product.model.js";
 import { removeImage } from "../../../service/multer.js";
 
 const getAllProducts = async (req, res) => {
-  const products = await productModel.find({});
+  const products = await productModel
+    .find({})
+    .populate(["category", "unitOfMeasure"]);
 
   if (products) {
     const baseUrl = process.env.BASEURL;
@@ -25,7 +27,9 @@ const getProduct = async (req, res) => {
   try {
     console.log(id);
 
-    const product = await productModel.findById(id);
+    const product = await productModel
+      .findById(id)
+      .populate(["category", "unitOfMeasure"]);
 
     // console.log(product);
 
@@ -50,7 +54,9 @@ const getAllProductsByUnit = async (req, res) => {
   const { unitId } = req.params;
 
   try {
-    const products = await productModel.find({ unitOfMeasure: unitId });
+    const products = await productModel
+      .find({ unitOfMeasure: unitId })
+      .populate(["category", "unitOfMeasure"]);
 
     if (products.length) {
       const baseUrl = process.env.BASEURL;
@@ -78,7 +84,9 @@ const getAllProductsByCategory = async (req, res) => {
   const { categoryId } = req.params;
 
   try {
-    const products = await productModel.find({ category: categoryId });
+    const products = await productModel
+      .find({ category: categoryId })
+      .populate(["category", "unitOfMeasure"]);
 
     if (products.length) {
       const baseUrl = process.env.BASEURL;
@@ -130,23 +138,27 @@ const addProduct = async (req, res) => {
   });
 
   product
+
     .save()
-    .then((result) => {
+    .then(async (result) => {
       const baseUrl = process.env.BASEURL;
+
+      await result.populate(["category", "unitOfMeasure"]);
 
       const productUrl =
         req.protocol + "://" + req.get("host") + baseUrl + "/uploads/products/";
 
       res.status(201).json({
-        message: "Product added successfully!",
+        message: "success",
+        imageBaseUrl: productUrl,
         data: {
           _id: result._id,
           name,
-          category,
+          category: result.category,
           code,
-          unitOfMeasure,
+          unitOfMeasure: result.unitOfMeasure,
           price,
-          image: productUrl + result.image,
+          image: result.image,
         },
       });
     })

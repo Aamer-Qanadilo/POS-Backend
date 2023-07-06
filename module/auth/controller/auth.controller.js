@@ -161,44 +161,54 @@ export const refreshToken = async (req, res) => {
 export const sendCode = async (req, res) => {
   const { email } = req.body;
 
-  const user = await userModel.findOne({ email });
+  try {
+    const user = await userModel.findOne({ email });
 
-  if (!user) {
-    res.json({ message: "invalid account" });
-  } else {
-    const accessCode = nanoid();
-    await userModel.findByIdAndUpdate(user._id, { code: accessCode });
+    if (!user) {
+      res.json({ message: "invalid account" });
+    } else {
+      const accessCode = nanoid();
+      await userModel.findByIdAndUpdate(user._id, { code: accessCode });
 
-    const message = ` <p style="font-size: 1.3rem;display: flex; flex-direction: column; gap: 10px; margin-top: 30px;"><span>Access code:</span><span style="border: 1px solid #1a82e2; padding: 10px 20px; color: #1a82e2;">${accessCode}</span></p>`;
+      const message = ` <p style="font-size: 1.3rem;display: flex; flex-direction: column; gap: 10px; margin-top: 30px;"><span>Access code:</span><span style="border: 1px solid #1a82e2; padding: 10px 20px; color: #1a82e2;">${accessCode}</span></p>`;
 
-    await myEmail({
-      email,
-      message,
-      emailPurpose: "Access Code to change your password",
-    });
+      await myEmail({
+        email,
+        message,
+        emailPurpose: "Access Code to change your password",
+      });
 
-    // Done , plz check your Email To Change Password
+      // Done , plz check your Email To Change Password
 
-    res.json({ message: "success" });
+      res.json({ message: "success" });
+    }
+  } catch (error) {
+    res.status(404).json({ message: "something went wrong", error });
   }
 };
 
 export const forgetPassword = async (req, res) => {
   const { email, code, newPassword } = req.body;
-  const user = await userModel.findOne({ email, code });
-  if (!user) {
-    res.json({
-      message: "failed",
-      error: "In-valid account or In-valid OTP Code",
-    });
-  } else {
-    bcrypt.hash(newPassword, 8, async function (err, hash) {
-      // console.log(hash, user, password);
-      await userModel.updateOne(
-        { _id: user._id },
-        { code: null, password: hash },
-      );
-      res.json({ message: "success" });
-    });
+
+  try {
+    const user = await userModel.findOne({ email, code });
+
+    if (!user) {
+      res.json({
+        message: "failed",
+        error: "In-valid account or In-valid OTP Code",
+      });
+    } else {
+      bcrypt.hash(newPassword, 8, async function (err, hash) {
+        // console.log(hash, user, password);
+        await userModel.updateOne(
+          { _id: user._id },
+          { code: null, password: hash },
+        );
+        res.json({ message: "success" });
+      });
+    }
+  } catch (error) {
+    res.status(404).json({ message: "something went wrong", error });
   }
 };

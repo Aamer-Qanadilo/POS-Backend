@@ -24,7 +24,7 @@ router.post(
 
 // Update an existing category
 router.patch(
-  "",
+  "/:id",
   myMulter("categories", validationTypes.image).single("image"),
   DetectError,
   categoryController.updateCategory,

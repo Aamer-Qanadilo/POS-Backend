@@ -74,24 +74,23 @@ const addCategory = async (req, res) => {
 
       res.status(201).json({
         message: "success",
-        data: {
-          _id: result._id,
-          name,
-          image: categoryUrl + result.image,
-        },
+        imageBaseUrl: categoryUrl,
+        data: result,
       });
     })
     .catch((err) => {
       console.log(req.body, price);
       console.log(err);
       res.status(500).json({
+        message: "something went wrong",
         error: err,
       });
     });
 };
 
 const updateCategory = async (req, res) => {
-  let { id, name } = req.body;
+  const { id } = req.params;
+  let { name } = req.body;
 
   try {
     let category = await categoryModel.findOne({ _id: id });
@@ -100,12 +99,22 @@ const updateCategory = async (req, res) => {
       //category exists
       const oldImageName = category.image;
 
-      await categoryModel.findOneAndUpdate(
-        { _id: id },
-        { name, image: req.file.filename },
-      );
+      let result;
+      if (req.file) {
+        result = await categoryModel.findOneAndUpdate(
+          { _id: id },
+          { name, image: req.file.filename },
+          { new: true },
+        );
 
-      removeImage("categories", oldImageName);
+        removeImage("categories", oldImageName);
+      } else {
+        result = await categoryModel.findOneAndUpdate(
+          { _id: id },
+          { name },
+          { new: true },
+        );
+      }
 
       const baseUrl = process.env.BASEURL;
 
@@ -118,17 +127,18 @@ const updateCategory = async (req, res) => {
 
       return res.status(201).json({
         message: "success",
-        data: {
-          _id: category._id,
-          name,
-          image: categoryUrl + req.file.filename,
-        },
+        imageBaseUrl: categoryUrl,
+        data: result,
       });
     } else {
+      if (req.file) removeImage("categories", req.file.filename);
+
       //no category for user, create new category
       return res.status(404).json({ message: "invalid category" });
     }
   } catch (err) {
+    if (req.file) removeImage("categories", req.file.filename);
+
     console.log(err);
     res
       .status(500)

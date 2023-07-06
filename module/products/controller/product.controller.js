@@ -151,15 +151,7 @@ const addProduct = async (req, res) => {
       res.status(201).json({
         message: "success",
         imageBaseUrl: productUrl,
-        data: {
-          _id: result._id,
-          name,
-          category: result.category,
-          code,
-          unitOfMeasure: result.unitOfMeasure,
-          price,
-          image: result.image,
-        },
+        data: result,
       });
     })
     .catch((err) => {
@@ -177,14 +169,21 @@ const updateProduct = async (req, res) => {
   let { name, code, category, price, unitOfMeasure } = req.body;
 
   try {
+    price = Number(price);
+    if (isNaN(price)) {
+      res.json({ message: "invalid inputs" });
+      return;
+    }
+
     let product = await productModel.findOne({ _id: id });
 
     if (product) {
       //product exists
       const oldImageName = product.image;
 
+      let result;
       if (req.file) {
-        await productModel.findOneAndUpdate(
+        result = await productModel.findOneAndUpdate(
           { _id: id },
           {
             name,
@@ -194,11 +193,12 @@ const updateProduct = async (req, res) => {
             price,
             unitOfMeasure,
           },
+          { new: true },
         );
 
         removeImage("products", oldImageName);
       } else {
-        await productModel.findOneAndUpdate(
+        result = await productModel.findOneAndUpdate(
           { _id: id },
           {
             name,
@@ -207,6 +207,7 @@ const updateProduct = async (req, res) => {
             price,
             unitOfMeasure,
           },
+          { new: true },
         );
       }
 
@@ -217,15 +218,8 @@ const updateProduct = async (req, res) => {
 
       return res.status(201).json({
         message: "success",
-        data: {
-          _id: product._id,
-          name,
-          code,
-          category,
-          price,
-          unitOfMeasure,
-          image: productUrl + (req.file ? req.file.filename : oldImageName),
-        },
+        imageBaseUrl: productUrl,
+        data: result,
       });
     } else {
       if (req.file) removeImage("products", req.file.filename);

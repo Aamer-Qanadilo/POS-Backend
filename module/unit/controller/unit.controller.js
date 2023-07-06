@@ -44,12 +44,7 @@ const addUnit = async (req, res) => {
       .then((result) => {
         res.status(201).json({
           message: "success",
-          data: {
-            _id: result._id,
-            name,
-            baseUnit,
-            conversionFactor,
-          },
+          data: result,
         });
       })
       .catch((err) => {
@@ -68,16 +63,15 @@ const updateUnit = async (req, res) => {
     const prevUnit = await unitModel.findOne({ _id: id });
 
     if (prevUnit) {
-      await unitModel.findOneAndUpdate({ _id: id }, { conversionFactor });
+      const result = await unitModel.findOneAndUpdate(
+        { _id: id },
+        { conversionFactor },
+        { new: true },
+      );
 
       return res.status(201).json({
         message: "success",
-        data: {
-          _id: prevUnit._id,
-          name: prevUnit.name,
-          baseUnit: prevUnit.baseUnit,
-          conversionFactor,
-        },
+        data: result,
       });
     } else {
       res.json({ message: "invalid inputs" });

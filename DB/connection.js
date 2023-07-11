@@ -1,8 +1,10 @@
 import mongoose from "mongoose";
+import { config } from "dotenv";
+config();
 
 const connectDB = async () => {
   return await mongoose
-    .connect("mongodb://localhost:27017/pos")
+    .connect(process.env.databaseUrl)
     .then((result) => {
       console.log(`DataBase Connected successfully`);
     })

@@ -3,6 +3,15 @@
 Express.js-based web application for managing products, product categories, and unit of measures. Provides CRUD operations for each of them.
 It also contains an authentication for users and requesting for auth before allowing them to do any of the CRUD operations.
 
+## Table of Contents
+
+- [Overview](#overview)
+- [Prerequisites](#prerequisites)
+- [Technologies](#technologies)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Socials](#socials)
+
 # Prerequisites
 
 Before running this project, make sure you have the following installed:
@@ -51,7 +60,7 @@ NOTE 2: All the endpoints returns a message with the word "success" inside if ev
 > - Endpoint: `/product`
 > - Method: GET
 > - Description: Retrieves all products.
-> - Response: Returns an array of product objects, a message that says "success" if data was retrived flawlessly and the productsImageBaseUrl which gives us the base url that we need to access the products images.
+> - Response: Returns an array of products, a message that says "success" if data was retrived flawlessly and the productsImageBaseUrl which gives us the base url that we need to access the products images.
 
 > #### Retrieve a specific product
 >
@@ -101,31 +110,31 @@ NOTE 2: All the endpoints returns a message with the word "success" inside if ev
 >   - `productId` (number) - The ID of the product.
 > - Response: Returns a success message if the product is deleted successfully, or an error message if not found.
 
-## Product Categories
+## Categories
 
 > #### Retrieve all categories
 >
 > - Endpoint: `/category`
 > - Method: GET
-> - Description: Retrieves all product categories.
-> - Response: Returns an array of product category objects.
+> - Description: Retrieves all categories.
+> - Response: Returns an array of categories, a message that says "success" if data was retrived flawlessly and the productsImageBaseUrl which gives us the base url that we need to access the products images.
 
 > #### Retrieve a specific category
 >
 > - Endpoint: `/category/:categoryId`
 > - Method: GET
-> - Description: Retrieves a specific product category based on the provided categoryId.
+> - Description: Retrieves a specific category based on the provided categoryId.
 > - Parameters:
->   - `categoryId` (number) - The ID of the product category.
-> - Response: Returns the product category object if found, or an error message if not found.
+>   - `categoryId` (number) - The ID of the category.
+> - Response: Returns the category object if found, or an error message if not found.
 
 > #### Create a new category
 >
 > - Endpoint: `/category`
 > - Method: POST
-> - Description: Creates a new product category.
+> - Description: Creates a new category.
 > - Request Body:
->   - `name` (string) - The name of the product category.
+>   - `name` (string) - The name of the category.
 >   - `image` (string) - The image URL of the category.
 > - Response: Returns the created category object if successful, or an error message if unsuccessful.
 
@@ -133,22 +142,22 @@ NOTE 2: All the endpoints returns a message with the word "success" inside if ev
 >
 > - Endpoint: `/category/:categoryId`
 > - Method: PATCH
-> - Description: Updates a specific product category based on the provided categoryId.
+> - Description: Updates a specific category based on the provided categoryId.
 > - Parameters:
->   - `categoryId` (number) - The ID of the product category.
+>   - `categoryId` (number) - The ID of the category.
 > - Request Body:
->   - `name` (string) - The updated name of the product category.
+>   - `name` (string) - The updated name of the category.
 >   - `image` (optional, string) - The image URL of the category.
-> - Response: Returns the updated product category object if successful, or an error message if unsuccessful.
+> - Response: Returns the updated category object if successful, or an error message if unsuccessful.
 
 > #### Delete a specific category
 >
 > - Endpoint: `/category/:categoryId`
 > - Method: DELETE
-> - Description: Deletes a specific product category based on the provided categoryId.
+> - Description: Deletes a specific category based on the provided categoryId.
 > - Parameters:
->   - `categoryId` (number) - The ID of the product category.
-> - Response: Returns a success message if the product category is deleted successfully, or an error message if not found.
+>   - `categoryId` (number) - The ID of the category.
+> - Response: Returns a success message if the category is deleted successfully, or an error message if not found.
 
 ## Unit of Measures
 
@@ -157,7 +166,7 @@ NOTE 2: All the endpoints returns a message with the word "success" inside if ev
 > - Endpoint: `/units`
 > - Method: GET
 > - Description: Retrieves all unit of measures.
-> - Response: Returns an array of unit of measure objects.
+> - Response: Returns an array of unit of measure objects, a message that says "success" if data was retrived flawlessly and the productsImageBaseUrl which gives us the base url that we need to access the products images.
 
 > #### Retrieve a specific unit of measure
 >

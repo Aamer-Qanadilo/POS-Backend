@@ -1,3 +1,4 @@
+
 # POS Backend
 
 Express.js-based web application for managing products, product categories, and unit of measures. Provides CRUD operations for each of them.
@@ -5,7 +6,6 @@ It also contains an authentication for users and requesting for auth before allo
 
 ## Table of Contents
 
-- [Overview](#overview)
 - [Prerequisites](#prerequisites)
 - [Technologies](#technologies)
 - [Installation](#installation)
@@ -18,6 +18,25 @@ Before running this project, make sure you have the following installed:
 
 - Node.js
 - npm
+
+
+## Technologies
+
+<p align="center">
+<img alt="NodeJS" src="https://github.com/Aamer-Qanadilo/POS-Backend/assets/104656644/99a1401d-8cdf-42fc-992a-db4e4899e3f3" height="60" width="60" />
+<img src="https://github.com/Aamer-Qanadilo/POS-Backend/assets/104656644/eb8ab953-5dac-4c87-b6b6-07bb5110fd01" alt="express js" height="60" width="90" />
+<img src="https://github.com/Aamer-Qanadilo/POS-Backend/assets/104656644/ca075311-dd26-4db7-8b33-bb3b3de6af6c" alt="mongoDB" height="60" width="60" />   
+<img src="https://github.com/Aamer-Qanadilo/POS-Backend/assets/104656644/b6231545-d2bd-4db0-978d-62d2f0b9a09c" alt="nodemailer" height="60"  width="60" />
+<img src="https://github.com/Aamer-Qanadilo/POS-Backend/assets/104656644/ec6191b1-9bc3-4032-a81c-cc2680f43c6f" alt="dotenv" height="60" width="60" />   
+
+</p>
+
+- [NodeJS](https://nodejs.org/en): an open-source, cross-platform JavaScript runtime environment.
+- [ExpressJS](https://expressjs.com/): Fast, unopinionated, minimalist web framework for Node.js
+- [MongoDB](https://www.mongodb.com/): Multi-cloud developer data platform. An integrated suite of cloud database services that allow you to address a wide variety of use cases.
+- [Nodemailer](https://nodemailer.com/about/): is a module for Node.js applications to allow easy as cake email sending.
+- [dotenv](https://www.dotenv.org/docs/): Sync your .env files with a single command, deploy them with an encrypted .env.vault file, and say goodbye to scattered secrets across multiple platforms and tools.
+  
 
 # Installation
 
